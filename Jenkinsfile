@@ -5,14 +5,18 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          docker.build('registrycontainer:5000/flask-image')
+          builtImage = docker.build('localhost:5000/flask-image')
         }
       }
     }
 
     stage('Publish') {
       steps {
-        echo 'Publish not yet implemented'
+        script {
+          docker.withRegistry('http://localhost:5000') {
+            builtImage.push()
+          }
+        }
       }
     }
   }
